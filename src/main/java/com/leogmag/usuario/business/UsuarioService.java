@@ -4,11 +4,15 @@ import com.leogmag.usuario.business.converter.UsuarioConverter;
 import com.leogmag.usuario.business.dto.UsuarioDTO;
 import com.leogmag.usuario.infrastructure.entity.Usuario;
 import com.leogmag.usuario.infrastructure.exceptions.ConflictException;
+import com.leogmag.usuario.infrastructure.exceptions.ResourceNotFoundException;
 import com.leogmag.usuario.infrastructure.repository.UsuarioRepository;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.lang.module.ResolutionException;
+import java.util.Optional;
 
 
 @Service
@@ -41,5 +45,15 @@ public class UsuarioService {
     }
     public boolean verificaEmailExistente(String email){
         return usuarioRepository.existsByEmail(email);
+    }
+
+    public Usuario buscarUsuarioPorEmail(String email){
+            return usuarioRepository.findByEmail(email).orElseThrow(
+                    () -> new ResolutionException("Email não encontrado" + email)
+            );
+    }
+
+    public void deletaUsuarioPorEmail(String email){
+        usuarioRepository.deleteByEmail(email);
     }
 }
