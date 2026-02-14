@@ -6,6 +6,7 @@ import com.leogmag.usuario.infrastructure.entity.Usuario;
 import com.leogmag.usuario.infrastructure.exceptions.ConflictException;
 import com.leogmag.usuario.infrastructure.exceptions.ResourceNotFoundException;
 import com.leogmag.usuario.infrastructure.repository.UsuarioRepository;
+import com.leogmag.usuario.infrastructure.security.JwtUtil;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public UsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO){
 
@@ -55,5 +57,15 @@ public class UsuarioService {
 
     public void deletaUsuarioPorEmail(String email){
         usuarioRepository.deleteByEmail(email);
+    }
+
+    public UsuarioDTO atualizaDadosUsuario(String token, UsuarioDTO usuarioDTO){
+        String email = jwtUtil.extractEmailToken(token.substring(7));
+        usuarioDTO.setSenha(usuarioDTO.getSenha() != null ? passwordEncoder.encode(usuarioDTO.getSenha()) : null);
+        Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new ResourceNotFoundException("email não localizado!"));
+        Usuario usuario = usuarioConverter.updateUsuario(usuarioDTO, usuarioEntity);
+        return  usuarioConverter.paraUsuarioDTO(usuarioRepository.save(usuario));
+
     }
 }
