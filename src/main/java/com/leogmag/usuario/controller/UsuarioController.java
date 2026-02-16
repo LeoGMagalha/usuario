@@ -4,6 +4,8 @@ import com.leogmag.usuario.business.UsuarioService;
 import com.leogmag.usuario.business.dto.EnderecoDTO;
 import com.leogmag.usuario.business.dto.TelefoneDTO;
 import com.leogmag.usuario.business.dto.UsuarioDTO;
+import com.leogmag.usuario.infrastructure.entity.Endereco;
+import com.leogmag.usuario.infrastructure.entity.Telefone;
 import com.leogmag.usuario.infrastructure.entity.Usuario;
 import com.leogmag.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +65,17 @@ public class UsuarioController {
     public ResponseEntity<TelefoneDTO> atualizaTelefone(@RequestBody TelefoneDTO dto,
                                                         @RequestParam("id") Long id){
         return ResponseEntity.ok(usuarioService.atualizaTelefone(id, dto));
+    }
+
+    @PostMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> cadastraEndereco(@RequestBody EnderecoDTO dto,
+                                                        @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(usuarioService.cadastraEndereco(token, dto));
+    }
+
+    @PostMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> cadastraEndereco(@RequestBody TelefoneDTO dto,
+                                                        @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(usuarioService.cadastraTelefone(token, dto));
     }
 }
