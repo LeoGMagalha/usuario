@@ -30,7 +30,7 @@ jobs:
             Branch: ${{ github.ref_name }}
             Triggered by: ${{ github.actor }}
           branch: ${{ github.ref_name }}
-          base: main
+          base: develop
           labels: |
             automated-pr
             needs-review
