@@ -17,8 +17,10 @@ public class UsuarioConverter {
                 .nome(usuarioDTO.getNome())
                 .senha(usuarioDTO.getSenha())
                 .email(usuarioDTO.getEmail())
-                .enderecos(paraEndereco(usuarioDTO.getEnderecos()))
-                .telefones(paraTelefone(usuarioDTO.getTelefones()))
+                .enderecos( usuarioDTO.getEnderecos() != null ?
+                        paraEndereco(usuarioDTO.getEnderecos()) : null)
+                .telefones( usuarioDTO.getTelefones() != null ?
+                        paraTelefone(usuarioDTO.getTelefones()) : null)
         .build();
     }
     public List<Endereco> paraEndereco(List<EnderecoDTO> enderecoDTOList){
@@ -52,8 +54,10 @@ public class UsuarioConverter {
                 .nome(usuario.getNome())
                 .senha(usuario.getSenha())
                 .email(usuario.getEmail())
-                .enderecos(paraEnderecoDTO(usuario.getEnderecos()))
-                .telefones(paraTelefoneDTO(usuario.getTelefones()))
+                .enderecos(usuario.getEnderecos() != null ?
+                        paraEnderecoDTO(usuario.getEnderecos()) : null)
+                .telefones( usuario.getTelefones() != null ?
+                        paraTelefoneDTO(usuario.getTelefones()): null)
                 .build();
     }
     public List<EnderecoDTO> paraEnderecoDTO(List<Endereco> enderecoList){
